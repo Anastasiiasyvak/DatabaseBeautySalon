@@ -45,13 +45,3 @@ FROM service
 LEFT JOIN appointment ON service.id = appointment.id_service
 GROUP BY service.name;
 
-
--- Запит для пошуку послуги з використанням індексу
-SELECT *
-FROM service
-WHERE name = 'Stacking and wrapping';
-
--- Запит для пошуку послуги без використання індексу
-SELECT *
-FROM service
-WHERE name LIKE '%Stacking and wrapping%';
