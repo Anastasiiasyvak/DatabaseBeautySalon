@@ -22,13 +22,14 @@ WHERE id IN (
 );
 
 -- вибираємо всі записи з таблиці appointment, де id_employee відповідає працівникам, які мають позицію "Master of hair styling"
-SELECT <set of columns>
+SELECT id, date_time, status
 FROM appointment
 WHERE id_employee IN (
     SELECT id_employee
     FROM employee
     WHERE position = 'Master of hair styling'
 );
+
 
 
 -- 2) IN with non-correlated subqueries result
@@ -113,12 +114,13 @@ WHERE NOT EXISTS (
 UPDATE employee
 SET salary = salary * 1.10
 WHERE EXISTS (
-    SELECT <set of columns>
+    SELECT id_employee
     FROM employee_service
-    INNER JOIN service  ON employee_service.id_service = service.id
+    INNER JOIN service ON employee_service.id_service = service.id
     WHERE employee_service.id_employee = employee.id
     AND service.name = 'Massage'
 );
+
 
 -- 5) NOT EXISTS with non-correlated subqueries result
 
