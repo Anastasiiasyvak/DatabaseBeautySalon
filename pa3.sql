@@ -22,7 +22,7 @@ WHERE id IN (
 );
 
 -- вибираємо всі записи з таблиці appointment, де id_employee відповідає працівникам, які мають позицію "Master of hair styling"
-SELECT *
+SELECT <set of columns>
 FROM appointment
 WHERE id_employee IN (
     SELECT id_employee
@@ -34,7 +34,7 @@ WHERE id_employee IN (
 -- 2) IN with non-correlated subqueries result
 
 -- Вибираємо всіх клієнтів, які здійснили хоча б один запис у таблиці appointment
-SELECT *
+SELECT 1
 FROM customer
 WHERE id IN (
     SELECT id_customer
@@ -62,7 +62,7 @@ WHERE id IN (
 -- 3) NOT IN with non-correlated subqueries result
 
 -- Вибираємо всі продукти, які не були призначені жодній послузі
-SELECT *
+SELECT 1
 FROM product
 WHERE id NOT IN (
     SELECT product_id
@@ -93,10 +93,10 @@ WHERE id NOT IN (
 -- 4) EXISTS with non-correlated subqueries result
 
 -- Вибираємо всіх клієнтів, які мають хоча б один запис про призначений їм запис
-SELECT *
+SELECT 1
 FROM customer
 WHERE EXISTS (
-    SELECT *
+    SELECT 1
     FROM appointment
     WHERE appointment.id_customer = customer.id
 );
@@ -104,7 +104,7 @@ WHERE EXISTS (
 -- Видаляємо всі записи про послуги, які не мають відповідних записів у таблиці services2products
 DELETE FROM service
 WHERE NOT EXISTS (
-    SELECT *
+    SELECT 1
     FROM services2products
     WHERE services2products.service_id = service.id
 );
@@ -113,7 +113,7 @@ WHERE NOT EXISTS (
 UPDATE employee
 SET salary = salary * 1.10
 WHERE EXISTS (
-    SELECT *
+    SELECT <set of columns>
     FROM employee_service
     INNER JOIN service  ON employee_service.id_service = service.id
     WHERE employee_service.id_employee = employee.id
@@ -124,10 +124,10 @@ WHERE EXISTS (
 
 
 -- Вибираємо всіх клієнтів, які не зробили жодного платежу
-SELECT *
+SELECT 1
 FROM customer
 WHERE NOT EXISTS (
-    SELECT *
+    SELECT 1
     FROM appointment
     WHERE appointment.id_customer = customer.id
 );
@@ -136,7 +136,7 @@ WHERE NOT EXISTS (
 UPDATE appointment
 SET status = 'cancelled'
 WHERE NOT EXISTS (
-    SELECT *
+    SELECT 1
     FROM payment
     WHERE payment.id_appointment = appointment.id
 );
@@ -144,7 +144,7 @@ WHERE NOT EXISTS (
 -- Видаляємо всі записи про клієнтів, які не зробили жодного платежу
 DELETE FROM customer
 WHERE NOT EXISTS (
-    SELECT *
+    SELECT 1
     FROM appointment
     WHERE appointment.id_customer = customer.id
 );
@@ -263,7 +263,7 @@ WHERE id_employee NOT IN (
 SELECT id, name, phone, email, position
 FROM employee
 WHERE EXISTS (
-    SELECT *
+    SELECT 1
     FROM employee_service
     JOIN service  ON employee_service.id_service = service.id
     JOIN appointment  ON employee_service.id_employee = employee_service.id
@@ -274,7 +274,7 @@ WHERE EXISTS (
 UPDATE appointment
 SET status = 'cancelled'
 WHERE EXISTS (
-    SELECT *
+    SELECT 1
     FROM customer
     WHERE customer.id = appointment.id_customer AND customer.status = 'no show'
 ) AND status = 'pending';
@@ -283,7 +283,7 @@ WHERE EXISTS (
 -- Видалення співробітників, які не мають зустрічей
 DELETE FROM employee
 WHERE NOT EXISTS (
-    SELECT *
+    SELECT 1
     FROM appointment
     WHERE appointment.id_employee = employee.id
 );
@@ -296,7 +296,7 @@ WHERE NOT EXISTS (
 SELECT id, name, position
 FROM employee
 WHERE NOT EXISTS (
-    SELECT *
+    SELECT 1
     FROM appointment
     WHERE appointment.id_employee = employee.id
 );
@@ -306,7 +306,7 @@ WHERE NOT EXISTS (
 UPDATE appointment
 SET status = 'cancelled'
 WHERE status = 'pending' AND NOT EXISTS (
-    SELECT *
+    SELECT 1
     FROM customer
     WHERE customer.id = appointment.id_customer
 );
@@ -315,7 +315,7 @@ WHERE status = 'pending' AND NOT EXISTS (
 -- Видаляємо співробітників, які не мають зустрічей
 DELETE FROM employee
 WHERE NOT EXISTS (
-    SELECT *
+    SELECT 1
     FROM appointment
     WHERE appointment.id_employee = employee.id
 );
